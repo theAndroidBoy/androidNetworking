@@ -35,7 +35,7 @@ public final class ParsingMethods {
 
             JSONArray earthquakeArray = baseJsonResponse.getJSONArray("features");
 
-            for (int i = 0; i < earthquakeArray.length(); i++) {
+            for (int i = 0; i < earthquakeArray.length(); i++) {   //Json parsing
 
                 JSONObject currentEarthquake = earthquakeArray.getJSONObject(i);
                 JSONObject properties = currentEarthquake.getJSONObject("properties");

@@ -68,8 +68,9 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         MyHolder myHolder = (MyHolder) holder;
         Earthquake current = data.get(position);
 
+
         String originalLocation = current.getLocation();
-        if (originalLocation.contains(LOCATION_SEPARATOR)) {
+        if (originalLocation.contains(LOCATION_SEPARATOR)) { //separating/spliting string
             String[] parts = originalLocation.split(LOCATION_SEPARATOR);
             locationOffset = parts[0] + LOCATION_SEPARATOR;
             primaryLocation = parts[1];
@@ -118,9 +119,9 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
 
-    private int getMagnitudeColor(double magnitude) {
+    private int getMagnitudeColor(double magnitude) {    // switch statement for choosing background color
         int magnitudeColorResourceId;
-        int magnitudeFloor = (int) Math.floor(magnitude);
+        int magnitudeFloor = (int) Math.floor(magnitude); //converting double to int
         switch (magnitudeFloor) {
             case 0:
             case 1:
@@ -158,17 +159,19 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return ContextCompat.getColor(context, magnitudeColorResourceId);
     }
 
-    private String formatMagnitude(double magnitude) {
+    private String formatMagnitude(double magnitude) {       // converting double to decimal formate of "0.0" and as a string
         DecimalFormat magnitudeFormat = new DecimalFormat("0.0");
         return magnitudeFormat.format(magnitude);
     }
 
-    private String formatDate(Date dateObject) {
+    private String formatDate(Date dateObject) {  // converting date obj to String date of formate "LLL dd, yyyy",date obj already contains
+                                                    // time in milliseconds
         SimpleDateFormat dateFormat = new SimpleDateFormat("LLL dd, yyyy");
         return dateFormat.format(dateObject);
     }
 
-    private String formatTime(Date dateObject) {
+    private String formatTime(Date dateObject) {        // converting date obj to String time of formate "h:mm a",,date obj already contains
+                                                        // time in milliseconds
         SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
         return timeFormat.format(dateObject);
     }
