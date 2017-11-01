@@ -1,11 +1,11 @@
 -Network call cannot be made of main thread,it will give error,in other words we can't do 
- HttpConnection without Async of loaders.
+ HttpConnection without Async or loaders.
 
 -make sure you got internet permission in manifest,sometimes its the biggest error we are searching for. 
 -AsyncTask is almost obselete ...loaders is the new thing.
 -even when if AsynTask was used. it was good for task that completes in less then 100ms after that app crashes.
 -AsyncTask is an abstract class.
--Generic with Async are just place holders and are used by some functions as parameter type or return type.
+-Generic's with Async are just place holders and are used by some functions like doInBackground and onPostExecute as parameter type or return type.
 -we call execute function on the Async obj in OnCreate().
 -execute may have no parameter at all
 -execute functions parameters are actually doInBackground functions parameters.
