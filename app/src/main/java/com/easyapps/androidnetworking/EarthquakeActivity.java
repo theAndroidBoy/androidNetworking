@@ -42,6 +42,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         recyclerView.setAdapter(adapter);
 
 // check if their is internet connection of not
+        //getSystemService is a function inside Context class and CONNECTIVITY_SERVICE is a String constant inside Context class.
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
 
