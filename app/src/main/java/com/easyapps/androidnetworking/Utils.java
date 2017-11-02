@@ -52,7 +52,7 @@ public final class Utils {
         }
 
         List<Earthquake> earthquake =
-                extractEarthquakes(jsonResponse);
+                parsingJsontoMakeObjects(jsonResponse);
         return earthquake;
     }
 
@@ -125,12 +125,11 @@ public final class Utils {
     }
 
 //.....................................................................................
-public static ArrayList<Earthquake> extractEarthquakes(String jsonResponse) {
+public static ArrayList<Earthquake> parsingJsontoMakeObjects(String jsonResponse) {
 
     ArrayList<Earthquake> earthquakes = new ArrayList<>();
 
     try {
-
         JSONObject baseJsonResponse = new JSONObject(jsonResponse);
 
         JSONArray earthquakeArray = baseJsonResponse.getJSONArray("features");

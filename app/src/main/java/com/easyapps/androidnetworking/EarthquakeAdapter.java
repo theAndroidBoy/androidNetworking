@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -157,4 +158,22 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
         return timeFormat.format(dateObject);
     }
+
+    public void updateData(ArrayList<Earthquake> datas)
+    {
+        //this will work if ArrayList inside Adapter is named "data"
+        if(datas == null || datas.size()==0)
+            return;
+        if (data != null && data.size()>0)
+            data.clear();
+        data.addAll(datas);
+        notifyDataSetChanged();
+
+    }
+
+    public void clearAdapterData()
+    {
+        data.clear();
+    }
+
 }
