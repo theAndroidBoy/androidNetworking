@@ -37,10 +37,14 @@ import java.util.List;
 //....................................................................
 public final class Utils {
 
+
     public static final String LOG_TAG = Utils.class.getSimpleName();
 
     public static List<Earthquake> fetchDataFromUrl(String requestUrl) {
-        Log.i("check", "inside fetchDataFromUrl " );
+
+        Log.i("flow","inside class:"+ Utils.class.getName());
+        Log.i("flow","inside function:"+ new Object(){}.getClass().getEnclosingMethod().getName());
+
         // Create URL object
         URL url = createUrl(requestUrl);
         String jsonResponse = null;
@@ -58,7 +62,9 @@ public final class Utils {
 
 //...............................................................................
     private static URL createUrl(String stringUrl) {
-        Log.i("check", "inside createUrl " );
+        Log.i("flow","inside class:"+ Utils.class.getName());
+        Log.i("flow","inside function:"+ new Object(){}.getClass().getEnclosingMethod().getName());
+
         URL url = null;
         try {
             url = new URL(stringUrl);
@@ -70,7 +76,9 @@ public final class Utils {
 
 //.................................................................................
     private static String makeHttpRequest(URL url) throws IOException {
-        Log.i("check", "inside makeHttpRequest " );
+        Log.i("flow","inside class:"+ Utils.class.getName());
+        Log.i("flow","inside function:"+ new Object(){}.getClass().getEnclosingMethod().getName());
+
         String jsonResponse = "";
         // If the URL is null, then return early.
         if (url == null) {
@@ -111,6 +119,9 @@ public final class Utils {
 
 //...............................................................................................
     private static String readFromStream(InputStream inputStream) throws IOException {
+        Log.i("flow","inside class:"+ Utils.class.getName());
+        Log.i("flow","inside function:"+ new Object(){}.getClass().getEnclosingMethod().getName());
+
         StringBuilder output = new StringBuilder();
         if (inputStream != null) {
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
@@ -126,6 +137,9 @@ public final class Utils {
 
 //.....................................................................................
 public static ArrayList<Earthquake> parsingJsontoMakeObjects(String jsonResponse) {
+
+    Log.i("flow","inside class:"+ Utils.class.getName());
+    Log.i("flow","inside function:"+ new Object(){}.getClass().getEnclosingMethod().getName());
 
     ArrayList<Earthquake> earthquakes = new ArrayList<>();
 
