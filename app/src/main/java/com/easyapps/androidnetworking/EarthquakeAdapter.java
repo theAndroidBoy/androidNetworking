@@ -19,12 +19,12 @@ import java.util.List;
 
 public class EarthquakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final String LOCATION_SEPARATOR = " of ";
+    private final String LOCATION_SEPARATOR = " of ";
     private Context context;
     private LayoutInflater inflater;
-    List<Earthquake> data = Collections.emptyList();
+    List<Earthquake> data = Collections.emptyList(); //create an empty list
     Earthquake current;
-    int currentPos = 0;
+
 
     public EarthquakeAdapter(Context context, List<Earthquake> data) {
         this.context = context;
@@ -32,6 +32,7 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.data = data;
 
         Log.i("flow","inside Constructor:"+ EarthquakeAdapter.class.getName());
+        Log.i("flow", "EarthquakeAdapter: ");
 
     }
 
@@ -40,7 +41,7 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         Log.i("flow","inside class:"+ EarthquakeAdapter.class.getName());
-        Log.i("flow","inside function:"+ new Object(){}.getClass().getEnclosingMethod().getName());
+        Log.i("flow", "onCreateViewHolder: ");
 
         View view = inflater.inflate(R.layout.earthquake_list_item, parent, false);
         MyHolder holder = new MyHolder(view);
@@ -51,7 +52,7 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Log.i("flow","inside class:"+ EarthquakeAdapter.class.getName());
-        Log.i("flow","inside function:"+ new Object(){}.getClass().getEnclosingMethod().getName());
+        Log.i("flow", "onBindViewHolder: ");
 
         String primaryLocation;
         String locationOffset;
@@ -86,7 +87,7 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public int getItemCount() {
         Log.i("flow","inside class:"+ EarthquakeAdapter.class.getName());
-        Log.i("flow","inside function:"+ new Object(){}.getClass().getEnclosingMethod().getName());
+        Log.i("flow", "getItemCount: ");
 
         return data.size();
     }
@@ -113,7 +114,7 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private int getMagnitudeColor(double magnitude) {    // switch statement for choosing background color
         Log.i("flow","inside class:"+ EarthquakeAdapter.class.getName());
-        Log.i("flow","inside function:"+ new Object(){}.getClass().getEnclosingMethod().getName());
+        Log.i("flow", "getMagnitudeColor: ");
 
         int magnitudeColorResourceId;
         int magnitudeFloor = (int) Math.floor(magnitude); //converting double to int
@@ -156,7 +157,7 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private String formatMagnitude(double magnitude) {       // converting double to decimal formate of "0.0" and as a string
         Log.i("flow","inside class:"+ EarthquakeAdapter.class.getName());
-        Log.i("flow","inside function:"+ new Object(){}.getClass().getEnclosingMethod().getName());
+        Log.i("flow", "formatMagnitude: ");
 
         DecimalFormat magnitudeFormat = new DecimalFormat("0.0");
         return magnitudeFormat.format(magnitude);
@@ -165,7 +166,7 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private String formatDate(Date dateObject) {  // converting date obj to String date of formate "LLL dd, yyyy",date obj already contains
                                                     // time in milliseconds
         Log.i("flow","inside class:"+ EarthquakeAdapter.class.getName());
-        Log.i("flow","inside function:"+ new Object(){}.getClass().getEnclosingMethod().getName());
+        Log.i("flow", "formatDate: ");
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("LLL dd, yyyy");
         return dateFormat.format(dateObject);
@@ -174,7 +175,7 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private String formatTime(Date dateObject) {        // converting date obj to String time of formate "h:mm a",,date obj already contains
                                                         // time in milliseconds
         Log.i("flow","inside class:"+ EarthquakeAdapter.class.getName());
-        Log.i("flow","inside function:"+ new Object(){}.getClass().getEnclosingMethod().getName());
+        Log.i("flow", "formatTime: ");
 
         SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
         return timeFormat.format(dateObject);
@@ -183,7 +184,7 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void updateData(ArrayList<Earthquake> datas)
     {
         Log.i("flow","inside class:"+ EarthquakeAdapter.class.getName());
-        Log.i("flow","inside function:"+ new Object(){}.getClass().getEnclosingMethod().getName());
+        Log.i("flow", "updateData: ");
 
         //this will work if ArrayList inside Adapter is named "data"
         if(datas == null || datas.size()==0)
@@ -198,7 +199,7 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void clearAdapterData()
     {
         Log.i("flow","inside class:"+ EarthquakeAdapter.class.getName());
-        Log.i("flow","inside function:"+ new Object(){}.getClass().getEnclosingMethod().getName());
+        Log.i("flow", "clearAdapterData: ");
 
         data.clear();
     }

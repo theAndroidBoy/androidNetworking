@@ -2,11 +2,8 @@ package com.easyapps.androidnetworking;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,14 +11,25 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.easyapps.androidnetworking.jsonSerializedClasses.Feature;
+import com.easyapps.androidnetworking.jsonSerializedClasses.JsonToJava;
+import com.easyapps.androidnetworking.jsonSerializedClasses.Properties;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Earthquake>> {
+public class EarthquakeActivity extends AppCompatActivity {
 
-    private static final String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
-    private static final int EARTHQUAKE_LOADER_ID = 1;
+    private final String REQUEST_URL =
+            "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
     private RecyclerView recyclerView;
     private EarthquakeAdapter adapter;
     private TextView mEmptyStateTextView;
@@ -31,73 +39,105 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
-        //----extras-----------
-        Log.i("flow","inside class:"+ EarthquakeActivity.class.getName());
-        Log.i("flow","inside function:"+ new Object(){}.getClass().getEnclosingMethod().getName());
+        Log.i("flow", "inside class:" + EarthquakeActivity.class.getName());
+        Log.i("flow", "onCreate: ");
+        setRecyclerView();
+//..................................................................................................
+        if (isNetworkConnected()) {
+            loadRecyclerViewData();
+        } else {
+            networkNotConnected();
+        }
+    }// onCreate closing bracket
 
+    //...........................................
+    private void setRecyclerView() {
         recyclerView = (RecyclerView) findViewById(com.easyapps.androidnetworking.R.id.recycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(EarthquakeActivity.this));
         //right now we have passed in an Empty list
         adapter = new EarthquakeAdapter(EarthquakeActivity.this, new ArrayList<Earthquake>());
         recyclerView.setAdapter(adapter);
 
-// check if their is internet connection of not
-        //getSystemService is a function inside Context class and CONNECTIVITY_SERVICE is a String constant inside Context class.
+    }
+
+    //........................................................................................
+    private void loadRecyclerViewData() {
+
+        Log.i("flow", "inside class:" + EarthquakeActivity.class.getName());
+        Log.i("flow", "loadRecyclerViewData: ");
+
+//.... building a request
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, REQUEST_URL,new ResponseListners(),new ResponseListners());
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+//as soon response is recived for a Stringrequest ,its callback methods are called.
+        requestQueue.add(stringRequest);
+    }
+
+    //.................................................
+    private boolean isNetworkConnected() {
+        Log.i("flow", "inside class:" + EarthquakeActivity.class.getName());
+        Log.i("flow", "isNetworkConnected: ");
+
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
-
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-
-        if (networkInfo != null && networkInfo.isConnected()) {
-            LoaderManager loaderManager = getSupportLoaderManager(); //every activity comes with loadManager
-            loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this); // second parameter is bundle of inputs,third is callback object which in our case is this.
-            // this will start loader with id "EARTHQUAKE_LOADER_ID", if not present then call methods in object given in third parameter is called.
-
-        } else {
-            View loadingIndicator = findViewById(R.id.loading_indicator);
-            loadingIndicator.setVisibility(View.GONE);
-
-            mEmptyStateTextView= (TextView) findViewById(R.id.empty_view);
-            // Update empty state with no connection error message
-            mEmptyStateTextView.setText(R.string.no_internet_connection);
-        }
-
+        if (networkInfo != null && networkInfo.isConnected())
+            return true;
+        else
+            return false;
     }
 
-//......................Loader callBacks................................
-@Override
-    public Loader<List<Earthquake>> onCreateLoader(int id, Bundle args) {
-    Log.i("flow","inside class:"+ EarthquakeActivity.class.getName());
-    Log.i("flow","inside function:"+ new Object(){}.getClass().getEnclosingMethod().getName());
-
-         return new EarthquakeLoader(this,USGS_REQUEST_URL);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<Earthquake>> loader, List<Earthquake> data) {
-
-        Log.i("flow","inside class:"+ EarthquakeActivity.class.getName());
-        Log.i("flow","inside function:"+ new Object(){}.getClass().getEnclosingMethod().getName());
+    //..................................................
+    private void networkNotConnected() {
+        Log.i("flow", "inside class:" + EarthquakeActivity.class.getName());
+        Log.i("flow", "networkNotConnected: ");
 
         View loadingIndicator = findViewById(R.id.loading_indicator);
         loadingIndicator.setVisibility(View.GONE);
+        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
+        // Update empty state with no connection error message
+        mEmptyStateTextView.setText(R.string.no_internet_connection);
 
-        if (data == null) {
-            return;
-        }
-
-        if (data != null && !data.isEmpty()) {
-
-            adapter.updateData((ArrayList)data);
-        }
     }
 
-    @Override
-    public void onLoaderReset(Loader<List<Earthquake>> loader) {
-        Log.i("flow","inside class:"+ EarthquakeActivity.class.getName());
-        Log.i("flow","inside function:"+ new Object(){}.getClass().getEnclosingMethod().getName());
+    //............................................
 
-    adapter.clearAdapterData();
+    private class ResponseListners implements Response.Listener<String>,Response.ErrorListener {
+
+        @Override
+        public void onResponse(String response) {
+
+            Log.i("flow", "inside class:" + EarthquakeActivity.class.getName());
+            Log.i("flow", "onResponse: recieved response :");
+
+            View loadingIndicator =findViewById(R.id.loading_indicator);
+            loadingIndicator.setVisibility(View.GONE);
+
+            ArrayList<Earthquake> earthquakes = new ArrayList<>();
+            //GsonBuilder will eventually create Gson obj. it is first used to change the configurations of
+            //that Gson obj for example "don't convert innerClass to json etc..we are not change configuration in this code though"
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            Gson gson = gsonBuilder.create(); //this will return a gson obj with configuration we set in gsonBuilder.
+
+            JsonToJava jsonToJava;
+            //second parameter is response type...in our case its Json object because we are storeing it in Json obj.
+            Log.i("check", "program reached till here");
+            jsonToJava = gson.fromJson(response, JsonToJava.class);
+
+            List<Feature> featureList = jsonToJava.getFeatures();
+            for (int i = 0; i < featureList.size(); i++) {
+                Properties properties = featureList.get(i).getProperties();
+                earthquakes.add(new Earthquake(properties.getMag(), properties.getPlace(),
+                        properties.getTime(), properties.getUrl()));
+            }
+            adapter.updateData(earthquakes);
+        }
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Log.i("flow", "onErrorResponse: error in response ");
+        }
+        //............
     }
-//........................................................................................
 }
